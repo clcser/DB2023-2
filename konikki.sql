@@ -8,15 +8,23 @@ CREATE TABLE evento (
 CREATE TABLE hora_evento(
     id_evento NUMBER NOT NULL REFERENCES evento(id_evento), 
     CONSTRAINT pk_hora_evento PRIMARY KEY (id_evento),
-    hora_inicio TIMESTAMP NOT NULL, 
+    hora_inicio TIMESTAMP NOT NULL
+); 
+CREATE TABLE hora_final_evento(
+    id_evento NUMBER NOT NULL REFERENCES evento(id_evento), 
+    CONSTRAINT pk_hora_evento PRIMARY KEY (id_evento),
     hora_final TIMESTAMP NOT NULL
 ); 
 CREATE TABLE fecha_evento (
     id_evento NUMBER NOT NULL REFERENCES evento(id_evento), 
     CONSTRAINT pk_hora_evento PRIMARY KEY (id_evento),
-    fecha DATE NOT NULL,
-    dias_consecutivos NUMBER(2) NOT NULL
+    fecha DATE NOT NULL
 );
+CREATE TABLE dias_consecutivos_evento(
+    id_evento NUMBER NOT NULL REFERENCES evento(id_evento), 
+    CONSTRAINT pk_hora_evento PRIMARY KEY (id_evento),
+    dias_consecutivos NUMBER(2) NOT NULL
+); 
 CREATE TABLE estado_de_evento(
     id_evento NUMBER NOT NULL REFERENCES evento(id_evento), 
     CONSTRAINT pk_hora_evento PRIMARY KEY (id_evento),
@@ -55,14 +63,20 @@ CREATE TABLE ciudad_ubicacion (
     ciudad VARCHAR(50) NOT NULL,
     CONSTRAINT pk_ciudad_ubicacion PRIMARY KEY (geopoint) 
 );
-
--- Atributos "ubicacion"
-CREATE TABLE descripcion_ubicación (
+CREATE TABLE aforo_ubicacion (
     geopoint VARCHAR(50) NOT NULL REFERENCES ubicacion(geopoint),
-    aforo NUMBER NOT NULL, 
+    aforo NUMBER NOT NULL,
+    CONSTRAINT pk_ciudad_ubicacion PRIMARY KEY (geopoint) 
+);
+CREATE TABLE banos_ubicacion (
+    geopoint VARCHAR(50) NOT NULL REFERENCES ubicacion(geopoint),
     cantidad_banos NUMBER NOT NULL, 
+    CONSTRAINT pk_ciudad_ubicacion PRIMARY KEY (geopoint) 
+);
+CREATE TABLE tejado_ubicacion (
+    geopoint VARCHAR(50) NOT NULL REFERENCES ubicacion(geopoint),
     tejado BOOLEAN NOT NULL,
-    CONSTRAINT pk_descripcion_ubicación PRIMARY KEY (geopoint)
+    CONSTRAINT pk_ciudad_ubicacion PRIMARY KEY (geopoint) 
 );
 
 --actividad
@@ -95,10 +109,18 @@ CREATE TABLE evento_asociado(
 
 -- organizador
 CREATE TABLE organizador(
-    usuario_org VARCHAR(50) SERIAL PRIMARY KEY,
-    correo VARCHAR(60) NOT NULL,
+    id_organizador NUMBER SERIAL PRIMARY KEY,
+    usuario_org VARCHAR(50) NOT NULL,
+);
+CREATE TABLE correo_organizador(
+    id_organizador NUMBER SERIAL PRIMARY KEY,
+    correo VARCHAR(60) NOT NULL
+);
+CREATE TABLE contrasena_organizador(
+    id_organizador NUMBER SERIAL PRIMARY KEY,
     contrasena VARCHAR(50) NOT NULL
 );
+
 CREATE TABLE administra_evento(
     id_evento NUMBER NOT NULL REFERENCES evento(id_evento),
     usuario_org VARCHAR(50) NOT NULL REFERENCES organizador(usuario_org),
@@ -153,10 +175,17 @@ CREATE TABLE producto_asociado_a_tienda(
 -- Entidad "tienda"
 CREATE TABLE tienda (
     id_tienda NUMBER SERIAL PRIMARY KEY,
-    usuario_tienda VARCHAR(50),
-    correo VARCHAR(60) NOT NULL, 
+    usuario_tienda VARCHAR(50)
+);
+CREATE TABLE correo_tienda (
+    id_tienda NUMBER SERIAL PRIMARY KEY,
+    correo VARCHAR(60) NOT NULL
+);
+CREATE TABLE contrasena_tienda (
+    id_tienda NUMBER SERIAL PRIMARY KEY,
     contrasena VARCHAR(50) NOT NULL
 );
+
 CREATE TABLE resena_tienda(
     id_tienda NUMBER NOT NULL REFERENCES tienda(id_tienda), 
     resena VARCHAR(200) NOT NULL,
